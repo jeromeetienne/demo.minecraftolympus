@@ -48,10 +48,13 @@ tQuery.inherit(tQuery.MeshPhongMaterial, tQuery.Material);
 */
 tQuery.mixinAttributes(tQuery.MeshPhongMaterial, {
 	color		: tQuery.convert.toThreeColor,
+	map		: tQuery.convert.toTexture,
 	ambient		: tQuery.convert.toThreeColor,
+	emissive	: tQuery.convert.toThreeColor,
 	specular	: tQuery.convert.toThreeColor,
 	shininess	: tQuery.convert.toNumber,
-	map		: tQuery.convert.toTexture
+	metal		: tQuery.convert.toBool,
+	perPixel	: tQuery.convert.toBool
 });
 
 

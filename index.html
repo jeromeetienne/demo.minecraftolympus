@@ -1,4 +1,4 @@
-<!doctype html><title>Minimal tQuery Page</title>
+<!doctype html><title>Minecraft digs Mount Olympus</title>
 <script src="vendor/tquery/tquery-bundle.js"></script>
 
 <script src="vendor/three.js/ShaderExtras.js"></script>
@@ -35,7 +35,7 @@
 
 
 <body><div id='info' style='color:white'>
-Minecraft digs Mont Olympus
+Minecraft digs Mount Olympus
 <br/>
 <a href='https://github.com/jeromeetienne/fireworks.js/' target='_blank'>firework.js</a> particles engine
 -
@@ -68,8 +68,8 @@ Minecraft digs Mont Olympus
 		.color(0xffffff).intensity(0)
 		.castShadow(true).shadowDarkness(0.8)
 		.shadowMap(512*2,512*2)
-		.shadowCamera(5, -5, 5, -5, 0.1, 50)
-		.shadowCameraVisible(true);
+		.shadowCamera(3, -3, 3, -3, 0.1, 50)
+		//.shadowCameraVisible(true);
 
 	//////////////////////////////////////////////////////////////////////////
 	//		cube map						//
@@ -156,9 +156,10 @@ if( true ){
 if( true ){
 	world.loop().hook(function(delta, now){
 		var angle	= 2/40 * now*Math.PI*2;
+//var angle	= 10/40 * now*Math.PI*2;
 		var position	= character.model.get(0).position;
 		var rotation	= character.model.get(0).rotation;
-		position.x	= 1.5 * Math.cos(angle);
+		position.x	= 1.75 * Math.cos(angle);
 		position.z	= 1/2 * Math.sin(angle);
 		rotation.y	= -angle;
 	});
@@ -171,16 +172,7 @@ if( true ){
 if( true ){
 	var container	= tQuery.createObject3D().addTo(world)
 		.scale(1/20)
-	var flamethrower= new Fireworks.ComboEmitter.Flamethrower({
-		imagesUrl	: 'images/flame/',
-		soundsUrl	: 'sounds/',
-		container	: container.get(0),
-		webaudio	: (new WebAudio()).volume(0.1),
-		onReady		: function(){
-			flamethrower.start();
-		}
-	});
-
+		
 	var source3D	= tQuery.createCylinder(0.55, 0.0001, 2).addTo(character.parts.armR)
 		.translateY(-(12-2)/35)
 		.translateZ(1/8+2/35)
@@ -190,12 +182,32 @@ if( true ){
 			.scaleBy(7* 1/35)
 			.translateZ(-1/8)
 			.back();
-	flamethrower.source3D(source3D.get(0))
 	
 	var target3D	= tQuery.createObject3D().addTo(source3D)
 		.translateY(-1/4)
 		.translateZ(1)
 		.scale(1/4)
+
+	var flameLight	= tQuery.createPointLight().addTo(source3D)
+		.color(0xffffFF)
+		.translateZ(0.5)
+		.intensity(5)
+	world.loop().hook(function(delta, now){
+		var angle	= 0.4 * now*Math.PI*2;
+		var intensity	= 4 + 1 * Math.sin(angle*5) * Math.sin(angle*3);
+		flameLight.intensity(intensity);
+	})
+
+	var flamethrower= new Fireworks.ComboEmitter.Flamethrower({
+		imagesUrl	: 'images/flame/',
+		soundsUrl	: 'sounds/',
+		container	: container.get(0),
+		webaudio	: (new WebAudio()).volume(0.1),
+		onReady		: function(){
+			flamethrower.start();
+		}
+	});
+	flamethrower.source3D(source3D.get(0))
 	flamethrower.target3D(target3D.get(0))
 }
 
@@ -203,36 +215,56 @@ if( true ){
 	//	mount olympus
 	//////////////////////////////////////////////////////////////////////////
 	var rings	= tQuery.createObject3D().addTo(world).translateY(0.8)
-	var geometry	= tQuery.createTorus(1/3, 0.1/3, 8, 6*6).geometry().get(0)
+	var geometry	= tQuery.createTorus(1/3, 0.2/3, 8, 6*6).geometry().get(0)
 	var texture	= THREE.ImageUtils.loadTexture("images/water.jpg");
+var emissive	= 0x000000;
+var specular	= 0xffffff;
+var shininess	= 100;
+var metal	= false;
+var perPixel	= true;
 
 	tQuery(geometry, new THREE.Material()).addTo(rings)
-		.setPhongMaterial().ambient(0x444444).color(0x2B60DE).map(texture).back()
-		.translateX(-0.8)
-		.translateY(+0.35)
+		.setPhongMaterial()
+			.ambient(0x444444).color(0x2B60DE).map(texture)
+			.specular(specular).shininess(shininess).emissive(emissive).metal(metal).perPixel(perPixel)
+			.back()
+		.translateX(-0.9)
+		.translateY(+0.4)
 		.castShadow(true)
 
 	tQuery(geometry, new THREE.Material()).addTo(rings)
-		.setPhongMaterial().ambient(0x444444).color(0x333333).map(texture).back()
+		.setPhongMaterial()
+			.ambient(0x444444).color(0x333333).map(texture)
+			.specular(specular).shininess(shininess).emissive(emissive).metal(metal).perPixel(perPixel)
+			.back()
 		.translateX(0)
-		.translateY(+0.35)
+		.translateY(+0.4)
 		.castShadow(true)
 
 	tQuery(geometry, new THREE.Material()).addTo(rings)
-		.setPhongMaterial().ambient(0x444444).color(0xff0000).map(texture).back()
-		.translateX(+0.8)
-		.translateY(+0.35)
+		.setPhongMaterial()
+			.ambient(0x444444).color(0xff0000).map(texture)
+			.specular(specular).shininess(shininess).emissive(emissive).metal(metal).perPixel(perPixel)
+			.back()
+		.translateX(+0.9)
+		.translateY(+0.4)
 		.castShadow(true)
 
 	tQuery(geometry, new THREE.Material()).addTo(rings)
-		.setPhongMaterial().ambient(0x444444).color(0xFFFF00).map(texture).back()
-		.translateX(-0.4)
+		.setPhongMaterial()
+			.ambient(0x444444).color(0xFFFF00).map(texture)
+			.specular(specular).shininess(shininess).emissive(emissive).metal(metal).perPixel(perPixel)
+			.back()
+		.translateX(-0.45)
 		.translateY(-0.35)
 		.castShadow(true)
 
 	tQuery(geometry, new THREE.Material()).addTo(rings)
-		.setPhongMaterial().ambient(0x444444).color(0x4CC417).map(texture).back()
-		.translateX(+0.4)
+		.setPhongMaterial()
+			.ambient(0x444444).color(0x4CC417).map(texture)
+			.specular(specular).shininess(shininess).emissive(emissive).metal(metal).perPixel(perPixel)
+			.back()
+		.translateX(+0.45)
 		.translateY(-0.35)
 		.castShadow(true)
 
